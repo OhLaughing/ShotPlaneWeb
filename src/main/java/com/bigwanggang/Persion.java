@@ -40,11 +40,14 @@ public class Persion {
         System.out.println(persion.getAge());
         fw.write(persion.getName() + "-" + persion.getId() + "-" + persion.getAge());
         fw.write("\r\n");
+        fw.flush();
         fw.close();
     }
        public static void save(String s) throws IOException {
         FileWriter fw = new FileWriter(FILE, true);
         fw.write(s);
         fw.write("\r\n");
+        fw.flush();
+        fw.close();
     }
 }
