@@ -15,7 +15,7 @@
     String ftype = request.getParameter("ftype");
     String name = new String(request.getParameter("name").getBytes("ISO-8859-1"), "UTF-8");
     out.println("name:" + name);
-    Persion.save(name + "--" + ftype);
+    Persion.save(name + "--" + ftype + " host:" + request.getRemoteHost() + " ip: " + request.getRemoteAddr());
 %>
 保存成功
 </body>
