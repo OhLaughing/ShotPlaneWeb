@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/css">
+        #container {
+            width: 100px;
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <canvas id="canvas" width="454" height="454" onclick="display()"></canvas>
+</div>
+
+<script>
+    var a = document.getElementById("canvas")
+    var ctx = a.getContext("2d");
+
+    for (var i = 0; i <= 15; i++) {
+        ctx.moveTo(i * 30, 0);
+        ctx.lineTo(i * 30, 450);
+        ctx.stroke()
+    }
+    for (var i = 0; i <= 15; i++) {
+        ctx.moveTo(0, i * 30);
+        ctx.lineTo(450, i * 30);
+        ctx.stroke()
+    }
+    function display() {
+
+        var box = a.getBoundingClientRect();
+        document.getElementById("display").innerHTML=
+        "x: " + Math.floor((event.x - box.left)/30) + "<br>" +
+            "y: " + Math.floor((event.y - box.top)/30)
+        ;
+    }
+
+</script>
+<p id="display">test</p>
+</body>
+</html>
