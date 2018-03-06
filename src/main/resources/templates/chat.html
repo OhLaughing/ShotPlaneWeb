@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 
-<html xmlns:th="http://www.thymeleaf.org">
-<meta charset="UTF-8" />
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+>
+<meta charset="UTF-8"/>
 <head>
     <title>Home</title>
     <script th:src="@{sockjs.min.js}"></script>
@@ -10,7 +11,8 @@
 </head>
 <body>
 
-<canvas width="400" height="400" id="cavas"></canvas>
+<canvas width="500" height="500" id="canvas" ondblclick="dbclick()"></canvas>
+<button onclick="dbclick()" text="BUTTON">BUTTON</button>
 
 <p>
     聊天室
@@ -22,15 +24,56 @@
 </form>
 
 <script th:inline="javascript">
-
-    var c=document.getElementById("cavas");
-    var ctx=c.getContext("2d");
+    var i;
+    var c = document.getElementById("canvas");
+    var ctx = c.getContext("2d");
     ctx.beginPath();
-    ctx.arc(100,75,50,0,2*Math.PI);
+    /* <![CDATA[ */
+    for (i = 0; i < 16; i++) {
+        ctx.moveTo(30, 30 + i * 30);
+        ctx.lineTo(480, 30 + i * 30);
+    }
+    for (i = 0; i < 16; i++) {
+        ctx.moveTo(30 + i * 30, 30);
+        ctx.lineTo(30 + i * 30, 480);
+    }
+    /* ]]> */
     ctx.stroke();
 
+    function getStyles(obj) {//兼容FF，IE10; IE9及以下未测试
+        return document.defaultView.getComputedStyle(obj);
+    }
 
-    $('#wiselyForm').submit(function(e){
+    function getCanvasPos(canvas, e) {//获取鼠标在canvas上的坐标
+        var rect = canvas.getBoundingClientRect();
+        var leftB = parseInt(getStyles(canvas).borderLeftWidth);//获取的是样式，需要转换为数值
+        var topB = parseInt(getStyles(canvas).borderTopWidth);
+        return {
+            x: (e.clientX - rect.left) - leftB,
+            y: (e.clientY - rect.top) - topB
+        };
+    }
+
+    function dbclick() {
+        var x = event.pageX;
+        var y = event.pageY;
+//        var x = event.pageX - ctx.getBoundingClientRect().left;
+//        var y = event.pageY - ctx.getBoundingClientRect().top;
+//        sendSpittle("x: " + x + ",y:" + y);
+        var xx = document.getElementById("test");
+
+        x = Math.floor((x - 30) / 30);
+        y = Math.floor((y - 30) / 30);
+        /* <![CDATA[ */
+        if (x >= 0 && x < 15 && y >= 0 && y < 15) {
+            xx.innerHTML = "x: " + x + ", y: " + y;
+            sendSpittle("x: " + x + ",y:" + y);
+        }
+        /* ]]> */
+    }
+
+
+    $('#wiselyForm').submit(function (e) {
         e.preventDefault();
         var text = $('#wiselyForm').find('textarea[name="text"]').val();
         sendSpittle(text);
@@ -38,10 +81,9 @@
 
     var sock = new SockJS("/endpointChat"); //1
     var stomp = Stomp.over(sock);
-    stomp.connect('guest', 'guest', function(frame) {
+    stomp.connect('guest', 'guest', function (frame) {
         stomp.subscribe("/user/queue/notifications", handleNotification);//2
     });
-
 
 
     function handleNotification(message) {
@@ -51,9 +93,13 @@
     function sendSpittle(text) {
         stomp.send("/chat", {}, text);//3
     }
-    $('#stop').click(function() {sock.close()});
+
+    $('#stop').click(function () {
+        sock.close()
+    });
 </script>
 
 <div id="output"></div>
+<p id="test">test</p>
 </body>
 </html>
