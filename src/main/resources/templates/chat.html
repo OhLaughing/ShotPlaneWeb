@@ -11,8 +11,22 @@
 </head>
 <body>
 
+<script>
+    var head = new Array(2);
+    var distanceFromBoundary = 30;
+    var LEN = 30;
+    head[0] = 7;
+    head[1] = 7;
+    var direction = 0;
+</script>
 <canvas width="500" height="500" id="canvas" ondblclick="dbclick()"></canvas>
-<button onclick="dbclick()" text="BUTTON">BUTTON</button>
+<button text="BUTTON" onclick="dbclick()">BUTTON</button>
+<button id="left" onclick="moveleft()">LEFT</button>
+<button id="right" onclick="moveright()">RIGHT</button>
+<button id="up" onclick="moveup()">UP</button>
+<button id="down" onclick="movedown()">DOWN</button>
+<button id="shun" onclick="shun()">SHUN</button>
+<button id="ni">NI</button>
 
 <p>
     聊天室
@@ -24,43 +38,171 @@
 </form>
 
 <script th:inline="javascript">
+
     var i;
     var c = document.getElementById("canvas");
     var ctx = c.getContext("2d");
-    ctx.beginPath();
-    /* <![CDATA[ */
-    for (i = 0; i < 16; i++) {
-        ctx.moveTo(30, 30 + i * 30);
-        ctx.lineTo(480, 30 + i * 30);
-    }
-    for (i = 0; i < 16; i++) {
-        ctx.moveTo(30 + i * 30, 30);
-        ctx.lineTo(30 + i * 30, 480);
-    }
-    /* ]]> */
-    ctx.stroke();
 
-    function getStyles(obj) {//兼容FF，IE10; IE9及以下未测试
-        return document.defaultView.getComputedStyle(obj);
+    plantPlane();
+
+    function plantPlane() {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, 500, 500);
+        plantForm();
+        var x = distanceFromBoundary + head[0] * LEN;
+        var y = distanceFromBoundary + head[1] * LEN;
+        ctx.fillStyle = "#410c0c";
+        ctx.fillRect(x, y, LEN, LEN);
+        if (direction == 0) {
+            ctx.fillRect(x - LEN * 2, y + LEN * 1, LEN * 5, LEN);
+            ctx.fillRect(x - LEN * 0, y + LEN * 2, LEN * 1, LEN);
+            ctx.fillRect(x - LEN * 1, y + LEN * 3, LEN * 3, LEN);
+        } else if (direction == 1) {
+            ctx.fillRect(x - LEN * 1, y - LEN * 2, LEN, LEN * 5);
+            ctx.fillRect(x - LEN * 2, y, LEN, LEN);
+            ctx.fillRect(x - LEN * 3, y - LEN * 1, LEN, LEN * 3);
+        } else if (direction == 2) {
+            ctx.fillRect(x - LEN * 2, y - LEN * 1, LEN * 5, LEN);
+            ctx.fillRect(x - LEN * 0, y - LEN * 2, LEN * 1, LEN);
+            ctx.fillRect(x - LEN * 1, y - LEN * 3, LEN * 3, LEN);
+        } else if (direction == 3) {
+            ctx.fillRect(x + LEN * 1, y - LEN * 2, LEN, LEN * 5);
+            ctx.fillRect(x + LEN * 2, y, LEN, LEN);
+            ctx.fillRect(x + LEN * 3, y - LEN * 1, LEN, LEN * 3);
+        }
     }
 
-    function getCanvasPos(canvas, e) {//获取鼠标在canvas上的坐标
-        var rect = canvas.getBoundingClientRect();
-        var leftB = parseInt(getStyles(canvas).borderLeftWidth);//获取的是样式，需要转换为数值
-        var topB = parseInt(getStyles(canvas).borderTopWidth);
+    function moveleft() {
+        var a = shapeOfPlane();
+
+        if (a.xmin > 0) {
+            head[0] -= 1;
+            plantPlane();
+        }
+    }
+
+    function moveright() {
+        var a = shapeOfPlane();
+
+        if (a.xmax < 14) {
+            head[0] += 1;
+            plantPlane();
+        }
+    }
+
+    function moveup() {
+        var a = shapeOfPlane();
+
+        if (a.ymin > 0) {
+            head[1] -= 1;
+            plantPlane();
+        }
+    }
+
+    function movedown() {
+        var a = shapeOfPlane();
+
+        if (a.ymax < 14) {
+            head[1] += 1;
+            plantPlane();
+        }
+    }
+
+    function shun() {
+        if (direction == 0) {
+            head[0] = head[0] + 1;
+            head[1] = head[1] + 1;
+            direction = 1;
+            if (shapeOfPlane().ymin < 0) {
+                head[1] += 1;
+            }
+        } else if (direction == 1) {
+            head[0] = head[0] - 1;
+            head[1] = head[1] + 1;
+            direction = 2;
+            if (shapeOfPlane().xmax > 14) {
+                head[0] -= 1;
+            }
+        } else if (direction == 2) {
+            head[0] = head[0] - 1;
+            head[1] = head[1] - 1;
+            direction = 3;
+            if (shapeOfPlane().ymax > 14) {
+                head[1] -= 1;
+            }
+        }else if (direction ==3) {
+            head[0] = head[0] + 1;
+            head[1] = head[1] - 1;
+            direction = 0;
+            if (shapeOfPlane().xmin < 0) {
+                head[0] += 1;
+            }
+        }
+        plantPlane();
+    }
+
+    function ni() {
+
+    }
+
+    function shapeOfPlane() {
+        var xmax = 0;
+        var xmin = 0;
+        var ymax = 0;
+        var ymin = 0;
+        if (direction == 0) {
+            ymin = head[1];
+            ymax = ymin + 3;
+            xmin = head[0] - 2;
+            xmax = head[0] + 2;
+        } else if (direction == 1) {
+            xmax = head[0];
+            xmin = xmax - 3;
+            ymin = head[1] - 2;
+            ymax = head[1] + 2;
+        } else if (direction == 2) {
+            ymax = head[1];
+            ymin = ymin - 3;
+            xmin = head[0] - 2;
+            xmax = head[0] + 2;
+        } else if (direction == 3) {
+            xmin = head[0];
+            xmax = xmin + 3;
+            ymin = head[1] - 2;
+            ymax = head[1] + 2;
+        }
+        document.getElementById("test").innerHTML = xmin + "," + xmax;
         return {
-            x: (e.clientX - rect.left) - leftB,
-            y: (e.clientY - rect.top) - topB
+            "xmin": xmin,
+            "xmax": xmax,
+            "ymin": ymin,
+            "ymax": ymax
         };
     }
 
+    function plantForm() {
+        ctx.beginPath();
+        /* <![CDATA[ */
+        for (i = 0; i < 16; i++) {
+            ctx.moveTo(30, 30 + i * 30);
+            ctx.lineTo(480, 30 + i * 30);
+        }
+        for (i = 0; i < 16; i++) {
+            ctx.moveTo(30 + i * 30, 30);
+            ctx.lineTo(30 + i * 30, 480);
+        }
+        /* ]]> */
+        ctx.stroke();
+    }
+
     function dbclick() {
+        var xx = document.getElementById("test");
         var x = event.pageX;
         var y = event.pageY;
 //        var x = event.pageX - ctx.getBoundingClientRect().left;
 //        var y = event.pageY - ctx.getBoundingClientRect().top;
 //        sendSpittle("x: " + x + ",y:" + y);
-        var xx = document.getElementById("test");
+
 
         x = Math.floor((x - 30) / 30);
         y = Math.floor((y - 30) / 30);
@@ -70,6 +212,7 @@
             sendSpittle("x: " + x + ",y:" + y);
         }
         /* ]]> */
+        xx.innerHTML = x;
     }
 
 
@@ -101,5 +244,7 @@
 
 <div id="output"></div>
 <p id="test">test</p>
+<p id="test1">test</p>
+
 </body>
 </html>
