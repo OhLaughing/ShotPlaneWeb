@@ -1,17 +1,16 @@
 <!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
->
-<meta charset="UTF-8"/>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Home</title>
+    <meta charset="UTF-8"/>
     <script th:src="@{sockjs.min.js}"></script>
     <script th:src="@{stomp.min.js}"></script>
     <script th:src="@{jquery.js}"></script>
     <link rel="stylesheet" type="text/css" href="../static/mystyle.css">
 </head>
 <body>
-<script>
+<script th:inline="javascript">
     var head = new Array(2);
     var distanceFromBoundary = 30;
     var LEN = 30;
@@ -21,14 +20,15 @@
 </script>
 <canvas width="500" height="500" id="canvas" ondblclick="dbclick()"></canvas>
 <br/>
-<input type="button" value="BUTTON" onclick="dbclick()" style="margin-left: 40%">
+<input type="button" value="BUTTON" onclick="dbclick()" style="margin-left: 40%"/>
 <br/>
-<input type="button" value="UP" onclick="moveup()" style="margin-left: 35px"/><br/>
-<input type="button" value="LEFT" onclick="moveleft()" style="margin-left: 0px"/>
-<input type="button" value="RIGHT" onclick="moveright()" style="margin-left: 0px"/><br/>
-<input type="button" value="DOWN" onclick="movedown()" style="margin-left: 23px"/><br/>
-<input type="button" value="SHUN" onclick="shun()"/>
-<input type="button" value="NI" onclick="ni()"/>
+<input class="btn" type="button" value="UP" onclick="moveup()" style="margin-left: 50px"/><br/>
+<input class="btn" type="button" value="LEFT" onclick="moveleft()" style="margin-left: 0"/>
+<input class="btn" type="button" value="OK" onclick="ok()"/>
+<input class="btn" type="button" value="RIGHT" onclick="moveright()" style="margin-left: 0"/><br/>
+<input class="btn" type="button" value="DOWN" onclick="movedown()" style="margin-left: 50px"/><br/>
+<input class="btn" type="button" value="SHUN" onclick="shun()"/>
+<input class="btn" type="button" value="NI" onclick="ni()"/>
 
 <p>
     聊天室
@@ -39,8 +39,8 @@
     <input type="submit" name="send"/>
 </form>
 
-<script th:inline="javascript">
-
+<script >
+    /* <![CDATA[ */
     var i;
     var c = document.getElementById("canvas");
     var ctx = c.getContext("2d");
@@ -108,6 +108,14 @@
             head[1] += 1;
             plantPlane();
         }
+    }
+
+    function ok() {
+        ctx.fillStyle = "#31230c";
+        ctx.fillRect(30, 30, 450, 450);
+        ctx.stroke();
+        plantForm();
+        sendSpittle("Ready:x:" + head[0] + ",y:" + head[1]);
     }
 
     function shun() {
@@ -213,7 +221,7 @@
 
     function plantForm() {
         ctx.beginPath();
-        /* <![CDATA[ */
+
         for (i = 0; i < 16; i++) {
             ctx.moveTo(30, 30 + i * 30);
             ctx.lineTo(480, 30 + i * 30);
@@ -222,7 +230,7 @@
             ctx.moveTo(30 + i * 30, 30);
             ctx.lineTo(30 + i * 30, 480);
         }
-        /* ]]> */
+
         ctx.stroke();
     }
 
@@ -237,12 +245,12 @@
 
         x = Math.floor((x - 30) / 30);
         y = Math.floor((y - 30) / 30);
-        /* <![CDATA[ */
+
         if (x >= 0 && x < 15 && y >= 0 && y < 15) {
             xx.innerHTML = "x: " + x + ", y: " + y;
             sendSpittle("x: " + x + ",y:" + y);
         }
-        /* ]]> */
+
         xx.innerHTML = x;
     }
 
@@ -271,11 +279,12 @@
     $('#stop').click(function () {
         sock.close()
     });
+    /* ]]> */
 </script>
-
 <div id="output"></div>
 <p id="test">test</p>
 <p id="test1">test</p>
 
 </body>
+
 </html>
