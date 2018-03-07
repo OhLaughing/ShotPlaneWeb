@@ -20,15 +20,16 @@
 </script>
 <canvas width="500" height="500" id="canvas" ondblclick="dbclick()"></canvas>
 <br/>
-<input type="button" value="BUTTON" onclick="dbclick()" style="margin-left: 40%"/>
+<input id="button" type="button" value="BUTTON" onclick="button()" style="margin-left: 40%"/>
 <br/>
-<input class="btn" type="button" value="UP" onclick="moveup()" style="margin-left: 50px"/><br/>
-<input class="btn" type="button" value="LEFT" onclick="moveleft()" style="margin-left: 0"/>
-<input class="btn" type="button" value="OK" onclick="ok()"/>
-<input class="btn" type="button" value="RIGHT" onclick="moveright()" style="margin-left: 0"/><br/>
-<input class="btn" type="button" value="DOWN" onclick="movedown()" style="margin-left: 50px"/><br/>
-<input class="btn" type="button" value="SHUN" onclick="shun()"/>
-<input class="btn" type="button" value="NI" onclick="ni()"/>
+<input id="up" class="btn" type="button" value="UP" onclick="moveup()" style="margin-left: 50px"/>
+<br/>
+<input id="left" class="btn" type="button" value="LEFT" onclick="moveleft()" style="margin-left: 0"/>
+<input id="ok" class="btn" type="button" value="OK" onclick="ok()"/>
+<input id="right" class="btn" type="button" value="RIGHT" onclick="moveright()" style="margin-left: 0"/><br/>
+<input id="down" class="btn" type="button" value="DOWN" onclick="movedown()" style="margin-left: 50px"/><br/>
+<input id="shun" class="btn" type="button" value="SHUN" onclick="shun()"/>
+<input id="ni" class="btn" type="button" value="NI" onclick="ni()"/>
 
 <p>
     聊天室
@@ -39,9 +40,9 @@
     <input type="submit" name="send"/>
 </form>
 
-<script >
-    /* <![CDATA[ */
-    var i;
+<script>
+
+    var i = 0;
     var c = document.getElementById("canvas");
     var ctx = c.getContext("2d");
 
@@ -110,10 +111,22 @@
         }
     }
 
+    function button() {
+        document.getElementById("test").innerHTML = i;
+        i++;
+    }
+
     function ok() {
         ctx.fillStyle = "#31230c";
+        document.getElementById("up").disabled = true;
+        document.getElementById("down").disabled = true;
+        document.getElementById("left").disabled = true;
+        document.getElementById("right").disabled = true;
+        document.getElementById("shun").disabled = true;
+        document.getElementById("ni").disabled = true;
+        document.getElementById("ok").disabled = true;
+
         ctx.fillRect(30, 30, 450, 450);
-        ctx.stroke();
         plantForm();
         sendSpittle("Ready:x:" + head[0] + ",y:" + head[1]);
     }
@@ -220,7 +233,7 @@
     }
 
     function plantForm() {
-        ctx.beginPath();
+//        ctx.beginPath();
 
         for (i = 0; i < 16; i++) {
             ctx.moveTo(30, 30 + i * 30);
@@ -238,10 +251,6 @@
         var xx = document.getElementById("test");
         var x = event.pageX;
         var y = event.pageY;
-//        var x = event.pageX - ctx.getBoundingClientRect().left;
-//        var y = event.pageY - ctx.getBoundingClientRect().top;
-//        sendSpittle("x: " + x + ",y:" + y);
-
 
         x = Math.floor((x - 30) / 30);
         y = Math.floor((y - 30) / 30);
@@ -279,7 +288,7 @@
     $('#stop').click(function () {
         sock.close()
     });
-    /* ]]> */
+
 </script>
 <div id="output"></div>
 <p id="test">test</p>
