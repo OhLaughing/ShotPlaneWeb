@@ -48,31 +48,36 @@ public class WsController {
                     if (playPlaneService.isGameBegin()) {
                         messagingTemplate.convertAndSendToUser("wyf",
                                 "/queue/notifications", "GAME BEGIN");
-                        messagingTemplate.convertAndSendToUser("wyf",
-                                "/queue/notifications", "YourTurn");
                         messagingTemplate.convertAndSendToUser("wisely",
                                 "/queue/notifications", "GAME BEGIN");
+                        messagingTemplate.convertAndSendToUser("wyf",
+                                "/queue/notifications", "YourTurn");
                         status = GameStatus.INGAME;
                     }
                 }
+                break;
             case INGAME:
                 String userName = principal.getName();
                 Point p = Util.getPoint(msg);
                 if ("wyf".equals(userName)) {
-
+                    messagingTemplate.convertAndSendToUser("wisely",
+                            "/queue/notifications", "YourTurn");
                 } else if ("wisely".equals(userName)){
-
+                    messagingTemplate.convertAndSendToUser("wyf",
+                            "/queue/notifications", "YourTurn");
                 }
+                break;
         }
+        System.out.println(status);
 
-        if (principal.getName().equals("wyf")) {//3
-            messagingTemplate.convertAndSendToUser("wisely",
-                    "/queue/notifications", principal.getName() + "-send:"
-                            + msg);
-        } else {
-            messagingTemplate.convertAndSendToUser("wyf",
-                    "/queue/notifications", principal.getName() + "-send:"
-                            + msg);
-        }
+//        if (principal.getName().equals("wyf")) {//3
+//            messagingTemplate.convertAndSendToUser("wisely",
+//                    "/queue/notifications", principal.getName() + "-send:"
+//                            + msg);
+//        } else {
+//            messagingTemplate.convertAndSendToUser("wyf",
+//                    "/queue/notifications", principal.getName() + "-send:"
+//                            + msg);
+//        }
     }
 }
