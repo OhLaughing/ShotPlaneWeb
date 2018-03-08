@@ -10,23 +10,12 @@
     <script th:src="@{jquery.js}"></script>
     <!--<link rel="stylesheet" type="text/css" href="../static/mystyle.css">-->
     <style type="text/css">
-        body {
-            margin: 0;
-            padding: 0;
-        }
-
         p {
             color: red;
         }
-
         input.btn {
-            height: 45px;
-            width: 45px;
-            font-size: 7px;
-        }
-
-        #canvas {
-            border: 0;
+            height:45px;width:45px;
+            font-size:7px;
         }
     </style>
 </head>
@@ -39,7 +28,6 @@
     head[1] = 7;
     var direction = 0;
     var turn = 0;
-    var shotcolor = "#ffffff";
 </script>
 <canvas width="500" height="500" id="canvas" ondblclick="dbclick()"></canvas>
 <br/>
@@ -156,7 +144,7 @@
 
         ctx.fillRect(30, 30, 450, 450);
         plantForm();
-        sendSpittle("Ready:x:" + head[0] + ",y:" + head[1] + ",p:" + position);
+        sendSpittle("Ready:x:" + head[0] + ",y:" + head[1]);
     }
 
     function shun() {
@@ -286,7 +274,7 @@
         x = Math.floor((x - 30) / 30);
         y = Math.floor((y - 30) / 30);
 
-        ctx.fillStyle = shotcolor;
+        ctx.fillStyle = "#ffffff";
         ctx.fillRect(distanceFromBoundary + x * LEN, distanceFromBoundary + y * LEN, LEN, LEN);
 
         if (x >= 0 && x < 15 && y >= 0 && y < 15) {
@@ -313,15 +301,9 @@
 
     function handleNotification(message) {
         $('#output').append("<b>Received: " + message.body + "</b><br/>");
-        if (message.body == "YourTurn") {
+        if (message.body =="YourTurn" ) {
             turn = 1;
             document.getElementById("test").innerHTML = "your turn";
-        } else if (message.body == "shotBody") {
-            shotcolor = "#ff6450";
-        } else if(message.body == "Yourwin") {
-            document.getElementById("test").innerHTML = "Yourwin";
-        } else {
-            shotcolor = "#ffffff";
         }
     }
 
