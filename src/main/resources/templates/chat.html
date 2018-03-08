@@ -28,6 +28,7 @@
     head[1] = 7;
     var direction = 0;
     var turn = 0;
+    var shotcolor = "#ffffff";
 </script>
 <canvas width="500" height="500" id="canvas" ondblclick="dbclick()"></canvas>
 <br/>
@@ -274,7 +275,7 @@
         x = Math.floor((x - 30) / 30);
         y = Math.floor((y - 30) / 30);
 
-        ctx.fillStyle = "#ffffff";
+        ctx.fillStyle = shotcolor;
         ctx.fillRect(distanceFromBoundary + x * LEN, distanceFromBoundary + y * LEN, LEN, LEN);
 
         if (x >= 0 && x < 15 && y >= 0 && y < 15) {
@@ -301,9 +302,13 @@
 
     function handleNotification(message) {
         $('#output').append("<b>Received: " + message.body + "</b><br/>");
-        if (message.body =="YourTurn" ) {
+        var message = message.body;
+        if (message =="YourTurn" ) {
             turn = 1;
+            shotcolor = "#ffffff";
             document.getElementById("test").innerHTML = "your turn";
+        } else if(message == "ShotBody") {
+            shotcolor = "#ff4d46"
         }
     }
 
