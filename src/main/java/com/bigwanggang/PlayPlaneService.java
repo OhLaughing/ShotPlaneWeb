@@ -76,6 +76,7 @@ public class PlayPlaneService {
                 }
                 break;
         }
+        planeBodys.put(name, points);
 
     }
 

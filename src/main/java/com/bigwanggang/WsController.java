@@ -35,9 +35,11 @@ public class WsController {
                 if (msg.startsWith("Ready")) {
                     System.out.println(msg);
                     Point head = Util.getPoint(msg);
+                    int position = Util.getPosition(msg);
                     String userName = principal.getName();
 
                     playPlaneService.addHead(userName, head);
+                    playPlaneService.addBody(userName, head, position);
 
                     if (userName.equals("wyf")) {
                         playPlaneService.setPlayer1Ready(true);
@@ -60,11 +62,21 @@ public class WsController {
                 String userName = principal.getName();
                 Point p = Util.getPoint(msg);
                 if ("wyf".equals(userName)) {
+                    if (playPlaneService.ifShotBody("wisely", p)) {
+                        messagingTemplate.convertAndSendToUser("wyf",
+                                "/queue/notifications", "ShotBody");
+                    }
                     messagingTemplate.convertAndSendToUser("wisely",
                             "/queue/notifications", "YourTurn");
-                } else if ("wisely".equals(userName)){
+
+                } else if ("wisely".equals(userName)) {
+                    if (playPlaneService.ifShotBody("wyf", p)) {
+                        messagingTemplate.convertAndSendToUser("wisely",
+                                "/queue/notifications", "ShotBody");
+                    }
                     messagingTemplate.convertAndSendToUser("wyf",
                             "/queue/notifications", "YourTurn");
+
                 }
                 break;
         }
