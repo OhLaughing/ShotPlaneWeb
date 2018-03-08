@@ -29,6 +29,7 @@
     var direction = 0;
     var turn = 0;
     var shotcolor = "#ffffff";
+    var ctx;
 </script>
 <canvas width="500" height="500" id="canvas" ondblclick="dbclick()"></canvas>
 <br/>
@@ -56,7 +57,7 @@
 
     var i = 0;
     var c = document.getElementById("canvas");
-    var ctx = c.getContext("2d");
+    ctx = c.getContext("2d");
 
     plantPlane();
 
@@ -308,8 +309,10 @@
             shotcolor = "#ffffff";
             document.getElementById("test").innerHTML = "your turn";
         } else if(message == "ShotBody") {
-            turn = 1;
-            shotcolor = "#ff4d46"
+          
+            ctx.fillStyle = "#ff4d46";
+            ctx.fillRect(distanceFromBoundary + x * LEN, distanceFromBoundary + y * LEN, LEN, LEN);
+
             document.getElementById("test").innerHTML = "shutbody";
         }
     }
