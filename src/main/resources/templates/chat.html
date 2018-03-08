@@ -7,7 +7,16 @@
     <script th:src="@{sockjs.min.js}"></script>
     <script th:src="@{stomp.min.js}"></script>
     <script th:src="@{jquery.js}"></script>
-    <link rel="stylesheet" type="text/css" href="../static/mystyle.css">
+    <!--<link rel="stylesheet" type="text/css" href="../static/mystyle.css">-->
+    <style type="text/css">
+        p {
+            color: red;
+        }
+        input.btn {
+            height:45px;width:45px;
+            font-size:7px;
+        }
+    </style>
 </head>
 <body>
 <script th:inline="javascript">
@@ -17,6 +26,7 @@
     head[0] = 7;
     head[1] = 7;
     var direction = 0;
+    var turn = 0;
 </script>
 <canvas width="500" height="500" id="canvas" ondblclick="dbclick()"></canvas>
 <br/>
@@ -116,6 +126,10 @@
         i++;
     }
 
+    function emptyFunc() {
+
+    }
+
     function ok() {
         ctx.fillStyle = "#31230c";
         document.getElementById("up").disabled = true;
@@ -125,6 +139,7 @@
         document.getElementById("shun").disabled = true;
         document.getElementById("ni").disabled = true;
         document.getElementById("ok").disabled = true;
+//        document.getElementById("canvas").ondblclick = emptyFunc();
 
         ctx.fillRect(30, 30, 450, 450);
         plantForm();
@@ -248,19 +263,25 @@
     }
 
     function dbclick() {
-        var xx = document.getElementById("test");
+        if (turn == 0) {
+            document.getElementById("test").innerHTML = "cannot";
+            return;
+        }
         var x = event.pageX;
         var y = event.pageY;
 
         x = Math.floor((x - 30) / 30);
         y = Math.floor((y - 30) / 30);
 
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(distanceFromBoundary + x * LEN, distanceFromBoundary + y * LEN, LEN, LEN);
+
         if (x >= 0 && x < 15 && y >= 0 && y < 15) {
-            xx.innerHTML = "x: " + x + ", y: " + y;
             sendSpittle("x: " + x + ",y:" + y);
         }
-
-        xx.innerHTML = x;
+        document.getElementById("test").innerHTML = "not your turn";
+        document.getElementById("test1").innerHTML = "x: " + x + ",y:" + y;
+        turn = 0;
     }
 
 
@@ -278,7 +299,11 @@
 
 
     function handleNotification(message) {
-        $('#output').append("<b>Received: " + message.body + "</b><br/>")
+        $('#output').append("<b>Received: " + message.body + "</b><br/>");
+        if (message.body =="YourTurn" ) {
+            turn = 1;
+            document.getElementById("test").innerHTML = "your turn";
+        }
     }
 
     function sendSpittle(text) {
