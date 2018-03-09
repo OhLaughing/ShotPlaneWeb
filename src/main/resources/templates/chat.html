@@ -18,6 +18,8 @@
             height: 45px;
             width: 45px;
             font-size: 7px;
+            margin-left: 20px;
+            margin-top: auto;
         }
 
         #canvas {
@@ -41,23 +43,20 @@
 </script>
 <canvas width="500" height="500" id="canvas" ondblclick="dbclick()"></canvas>
 <br/>
-<input id="button" type="button" value="BUTTON" onclick="button()" style="margin-left: 40%"/>
-<br/>
-<input id="up" class="btn" type="button" value="UP" onclick="moveup()" style="margin-left: 50px"/>
-<br/>
-<input id="left" class="btn" type="button" value="LEFT" onclick="moveleft()" style="margin-left: 0"/>
-<input id="ok" class="btn" type="button" value="OK" onclick="ok()"/>
-<input id="right" class="btn" type="button" value="RIGHT" onclick="moveright()" style="margin-left: 0"/><br/>
-<input id="down" class="btn" type="button" value="DOWN" onclick="movedown()" style="margin-left: 50px"/><br/>
-<input id="shun" class="btn" type="button" value="SHUN" onclick="shun()"/>
-<input id="ni" class="btn" type="button" value="NI" onclick="ni()"/>
 
-<p>
-    聊天室
-</p>
+<input id="up" class="btn" type="button" value="UP" onclick="moveup()" style="margin-left: 75px"/>
+
+<br/>
+<input id="left" class="btn" type="button" value="LEFT" onclick="moveleft()" style="margin-top: 0px"/>
+<input id="ok" class="btn" type="button" value="OK" onclick="ok()" style="margin-left: 5px;margin-top: 10px"/>
+<input id="right" class="btn" type="button" value="RIGHT" onclick="moveright()" style="margin-left: 5px"/>
+
+<input id="shun" class="btn" type="button" value="SHUN" onclick="shun()" style="margin-left: 80px"/>
+<input id="ni" class="btn" type="button" value="NI" onclick="ni()"/><br/>
+<input id="down" class="btn" type="button" value="DOWN" onclick="movedown()" style="margin-left: 75px;margin-top: 10px"/>
 
 <form id="wiselyForm">
-    <textarea rows="4" cols="60" name="text"></textarea>
+    <textarea rows="2" cols="60" name="text"></textarea>
     <input type="submit" name="send"/>
 </form>
 
@@ -72,6 +71,7 @@
     function plantPlane() {
         ctx.fillStyle = "#ffffff";
         ctx.fillRect(0, 0, 500, 500);
+        ctx.strokeStyle = "#000000";
         plantForm();
         var x = distanceFromBoundary + head[0] * LEN;
         var y = distanceFromBoundary + head[1] * LEN;
@@ -142,7 +142,7 @@
     }
 
     function ok() {
-        ctx.fillStyle = "#31230c";
+        ctx.fillStyle = "#414141";
         document.getElementById("up").disabled = true;
         document.getElementById("down").disabled = true;
         document.getElementById("left").disabled = true;
@@ -310,21 +310,21 @@
 
 
     function handleNotification(message) {
-        $('#output').append("<b>Received: " + message.body + "</b><br/>");
+
         var mess = message.body;
         if (mess == "YourTurn") {
             turn = 1;
             shotcolor = "#ffffff";
-            document.getElementById("test").innerHTML = "your turn";
+            $('#output').html("<b> your turn </b>");
         } else if (mess == "ShotBody") {
 
-            ctx.fillStyle = "#ff4d46";
+            ctx.fillStyle = "#410c0c";
             ctx.fillRect(distanceFromBoundary + x * LEN, distanceFromBoundary + y * LEN, LEN, LEN);
-
-            document.getElementById("test").innerHTML = "shutbody";
+            $('#output').html("<b> good! shot body! </b>");
         } else if (mess == "ShotEmpty") {
             ctx.fillStyle = "#ffffff";
             ctx.fillRect(distanceFromBoundary + x * LEN, distanceFromBoundary + y * LEN, LEN, LEN);
+            $('#output').html("<b> shot empty, try again </b>");
         }
     }
 
@@ -338,8 +338,6 @@
 
 </script>
 <div id="output"></div>
-<p id="test">test</p>
-<p id="test1">test</p>
 
 </body>
 
