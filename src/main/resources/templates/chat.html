@@ -73,8 +73,8 @@
         ctx.fillRect(0, 0, 500, 500);
         ctx.strokeStyle = "#000000";
         plantForm();
-        var x = distanceFromBoundary + head[0] * LEN;
-        var y = distanceFromBoundary + head[1] * LEN;
+        x = distanceFromBoundary + head[0] * LEN;
+        y = distanceFromBoundary + head[1] * LEN;
         ctx.fillStyle = "#410c0c";
         ctx.fillRect(x, y, LEN, LEN);
         if (direction == 0) {
@@ -249,7 +249,7 @@
             ymin = head[1] - 2;
             ymax = head[1] + 2;
         }
-        document.getElementById("test").innerHTML = xmin + "," + xmax;
+
         return {
             "xmin": xmin,
             "xmax": xmax,
@@ -275,7 +275,7 @@
 
     function dbclick() {
         if (turn == 0) {
-            document.getElementById("test").innerHTML = "cannot";
+
             return;
         }
         x = event.pageX;
@@ -290,8 +290,7 @@
         if (x >= 0 && x < 15 && y >= 0 && y < 15) {
             sendSpittle("x:" + x + ",y:" + y + ",d:" + direction);
         }
-        document.getElementById("test").innerHTML = "not your turn";
-        document.getElementById("test1").innerHTML = "x: " + x + ",y:" + y;
+
         turn = 0;
     }
 
