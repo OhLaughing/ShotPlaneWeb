@@ -81,6 +81,8 @@ public class PlayPlaneService {
     }
 
     public boolean ifShotBody(String name, Point point) {
+        System.out.println(planeBodys.get(name));
+        System.out.println("Shot" + point.toString());
         return planeBodys.get(name).contains(point);
     }
 }
