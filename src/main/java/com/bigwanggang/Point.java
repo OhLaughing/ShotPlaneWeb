@@ -26,6 +26,15 @@ public class Point {
         result = 31 * result + y;
         return result;
     }
+    
+        @Override
+    public String toString() {
+        return "Point{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
+    }
+
 
     public int getX() {
         return x;
