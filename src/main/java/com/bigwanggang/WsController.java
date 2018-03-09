@@ -60,11 +60,16 @@ public class WsController {
                 break;
             case INGAME:
                 String userName = principal.getName();
+                System.out.println("msg: " + msg);
                 Point p = Util.getPoint(msg);
+                System.out.println(p.toString());
                 if ("wyf".equals(userName)) {
                     if (playPlaneService.ifShotBody("wisely", p)) {
                         messagingTemplate.convertAndSendToUser("wyf",
                                 "/queue/notifications", "ShotBody");
+                    } else {
+                        messagingTemplate.convertAndSendToUser("wyf",
+                                "/queue/notifications", "ShotEmpty");
                     }
                     messagingTemplate.convertAndSendToUser("wisely",
                             "/queue/notifications", "YourTurn");
@@ -73,10 +78,12 @@ public class WsController {
                     if (playPlaneService.ifShotBody("wyf", p)) {
                         messagingTemplate.convertAndSendToUser("wisely",
                                 "/queue/notifications", "ShotBody");
+                    } else {
+                        messagingTemplate.convertAndSendToUser("wisely",
+                                "/queue/notifications", "ShotEmpty");
                     }
                     messagingTemplate.convertAndSendToUser("wyf",
                             "/queue/notifications", "YourTurn");
-
                 }
                 break;
         }
