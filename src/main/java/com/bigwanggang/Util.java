@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
  */
 public class Util {
     public static final Pattern POINTPATTERN = Pattern.compile("x:(\\d+),y:(\\d+)");
-    public static final Pattern POSITIONPATTERN = Pattern.compile("p:(\\d+)");
+    public static final Pattern POSITIONPATTERN = Pattern.compile("d:(\\d+)");
 
     public static Point getPoint(String s) {
         Matcher m = POINTPATTERN.matcher(s);
