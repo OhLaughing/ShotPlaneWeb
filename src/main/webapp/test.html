@@ -1,0 +1,117 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>LIGHTBOX EXAMPLE</title>
+    <script src="http://cdn.static.runoob.com/libs/jquery/1.10.2/jquery.min.js">
+    </script>
+    <style>
+        .black_overlay {
+            display: none;
+            position: absolute;
+            top: 0%;
+            left: 0%;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index: 1001;
+            -moz-opacity: 0.6;
+            opacity: .60;
+            filter: alpha(opacity=60);
+        }
+
+        .white_content {
+            display: none;
+            position: absolute;
+            top: 25%;
+            left: 25%;
+            width: 50%;
+            height: 50%;
+            padding: 16px;
+            border: 2px solid black;
+            background-color: white;
+            z-index: 1002;
+            overflow: auto;
+        }
+    </style>
+    <script>
+        function one() {
+            document.getElementById('light').style.display = 'block';
+            document.getElementById('fade').style.display = 'block'
+        }
+        function two() {
+            document.getElementById('light').style.display = 'none';
+            document.getElementById('fade').style.display = 'none';
+
+        }
+        function cancel() {
+            document.getElementById('light').style.display = 'none';
+            document.getElementById('fade').style.display = 'none'
+        }
+        function delete1() {
+
+        }
+    </script>
+    <script>
+        $(function () {
+            $("#addEmpButton").click(function () {
+
+                $("<tr></tr>").append($("<td>" + $("#id").val() + "</td>"))
+                    .append($("<td>" + $("#name").val() + "</td>"))
+                    .append($("<td>" + $("#phone").val() + "</td>"))
+                    .appendTo($("#table1 tr:eq(1)"))
+//                    .find("a")
+                    .click(function () {
+
+                        return removeTr(this);
+                    });
+            });
+        });
+
+    </script>
+</head>
+<body>
+<div>
+    <input type="button" value="add" onclick="one()">
+    <input type="button" value="del" onclick="delete1()" disabled="disabled">
+</div>
+<div id="light" class="white_content">
+    This is the lightbox content.
+    <form>
+        Id:
+        <input type="text" name="id" id="id">
+        <br>
+        Name:
+        <input type="text" name="name" id="name">
+        <br>
+        Phone:
+        <input type="text" name="phone" id="phone">
+    </form>
+    <input id="addEmpButton" type="button" value="OK" onclick="two()">
+    <input type="button" value="Cancel" onclick="cancel()">
+</div>
+<div id="fade" class="black_overlay">
+</div>
+<table id="table1">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Phone</th>
+    </tr>
+    <tr>
+        <td><input id="allCkb1" type="checkbox"/>11</td>
+        <td>测试</td>
+        <td>12388888888</td>
+    </tr>
+    <tr>
+        <td><input id="allCkb2" type="checkbox"/>22</td>
+        <td>测试</td>
+        <td>12388888888</td>
+    </tr>
+    <tr>
+        <td><input id="allCkb3" type="checkbox"/>33</td>
+        <td>测试</td>
+        <td>12388888888</td>
+    </tr>
+</table>
+</body>
+</html>
